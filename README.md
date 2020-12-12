@@ -1,2 +1,2 @@
 # Calculator
-This is a calculator that I made.
+This is a calculator program that I made in C++.
