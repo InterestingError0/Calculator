@@ -78,12 +78,7 @@ double multiply(double a, double b) {
 }
 
 double divide(double a, double b) {
-	if(b != 0) {
-		return a / b;
-	} else {
-		std::cout << "Illegal operation! Cannont divide by 0.\n\n";
-		return 0;
-	}
+	return a / b;
 }
 
 double exponent(double a, double b) {
@@ -140,7 +135,7 @@ int main() {
 					std::cout << firstNumber << " / " << secondNumber << " = " << divide(firstNumber, secondNumber) << "\n\n";
 					break;
 				} else {
-					divide(firstNumber, secondNumber);
+					std::cout << "Illegal operation! Cannont divide by 0.\n\n";
 					break;
 				}
 			case '^':
