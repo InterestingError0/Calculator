@@ -35,8 +35,9 @@ char getOperationFromUser() {
 std::string getStatisticalAverageFromUser() {
 	std::string input;
 	std::cout << "Enter a statistical average (e.g., mean, median): ";
-
-	while(std::cin >> input && (input != "mean" && input != "median")) {
+	std::cin >> input;
+	std::transform(input.begin(), input.end(), input.begin(), [](unsigned char c) { return static_cast <char>(std::tolower(c)); });
+	while(std::cin && (input != "mean" && input != "median")) {
 		std::cout << "Please enter a valid statistical average\n";
 		clearInputBuffer();
 	}
@@ -56,12 +57,12 @@ int main() {
 		char mode;
 		std::cout << "Enter 'a' to enter arithmetic mode, 's' to enter statistical average (mean/median) mode, or 'q' to quit: ";
 
-		while(!(std::cin >> mode) || (mode != 'a' && mode != 's')) {
-			std::cout << "Please enter either 1 or 2.\n";
+		while(!(std::cin >> mode) || (mode != 'a' && mode != 's' && mode != 'q')) {
+			std::cout << "Please enter 'a','s', or 'q'.\n";
 			clearInputBuffer();
 		}
 		if(mode == 'q') {
-			break;
+			return 0;
 		} else if(mode == 'a') {
 			double firstNumber{ getNumberFromUser() };
 			char operation{ getOperationFromUser() };
@@ -104,7 +105,7 @@ int main() {
 		} else {
 			std::string statisticalAverage{ getStatisticalAverageFromUser() };
 
-			if(statisticalAverage == "mean" || statisticalAverage == "Mean") {
+			if(statisticalAverage == "mean") {
 				std::vector <double> numbers;
 				std::cout << "Enter the numbers you would like to find the mean of (q to stop entering numbers): \n";
 
@@ -117,9 +118,9 @@ int main() {
 					sum += x;
 				}
 				std::cout << "The mean is " << sum / numbers.size() << '\n';
-			} else if(statisticalAverage == "median" || statisticalAverage == "Median") {
+			} else if(statisticalAverage == "median") {
 				std::vector <double> numbers;
-				std::cout << "Enter the numbers you would like to find the mean of (q to stop entering numbers): \n";
+				std::cout << "Enter the numbers you would like to find the median of (q to stop entering numbers): \n";
 
 				for(double number{ 0 }; std::cin >> number;) {
 					numbers.push_back(number);
@@ -135,6 +136,4 @@ int main() {
 			clearInputBuffer();
 		}
 	}
-
-	return 0;
 }
