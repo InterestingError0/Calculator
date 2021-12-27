@@ -11,7 +11,7 @@ void clearInputBuffer() {
 }
 
 double getNumberFromUser() {
-	double input{};
+	double input;
 	std::cout << "Enter a number: ";
 
 	while(!(std::cin >> input)) {
@@ -22,7 +22,7 @@ double getNumberFromUser() {
 }
 
 char getOperationFromUser() {
-	char input{};
+	char input;
 	std::cout << "Enter an operator (+, -, *, /, ^, !, or %): ";
 
 	while(std::cin >> input && (input != '+' && input != '-' && input != '*' && input != '/' && input != '^' && input != '!' && input != '%')) {
@@ -33,7 +33,7 @@ char getOperationFromUser() {
 }
 
 std::string getStatisticalAverageFromUser() {
-	std::string input{};
+	std::string input;
 	std::cout << "Enter a statistical average (e.g., mean, median): ";
 
 	while(std::cin >> input && (input != "mean" && input != "median")) {
@@ -53,15 +53,16 @@ double factorial(double a) {
 
 int main() {
 	for(;;) {
-		int mode{};
-		std::cout << "Enter 1 to enter arithmetic mode. Enter 2 to enter statistical average (mean/median) mode: ";
+		char mode;
+		std::cout << "Enter 'a' to enter arithmetic mode, 's' to enter statistical average (mean/median) mode, or 'q' to quit: ";
 
-		while(!(std::cin >> mode) || (mode != 1 && mode != 2)) {
+		while(!(std::cin >> mode) || (mode != 'a' && mode != 's')) {
 			std::cout << "Please enter either 1 or 2.\n";
 			clearInputBuffer();
 		}
-
-		if(mode == 1) {
+		if(mode == 'q') {
+			break;
+		} else if(mode == 'a') {
 			double firstNumber{ getNumberFromUser() };
 			char operation{ getOperationFromUser() };
 			double secondNumber{ 0 };
@@ -134,4 +135,6 @@ int main() {
 			clearInputBuffer();
 		}
 	}
+
+	return 0;
 }
