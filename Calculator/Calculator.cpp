@@ -9,8 +9,6 @@ int mainMenu() {
 	int input{ 0 };
 
 	do {
-		std::cin.clear();
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		std::cout << "Enter 1 to enter arithmetic mode. Enter 2 to enter statistical average (e.g., mean, median) mode: ";
 		std::cin >> input;
 
@@ -65,26 +63,6 @@ std::string getStatisticalAverageFromUser() {
 	return input;
 }
 
-double add(double a, double b) {
-	return a + b;
-}
-
-double subtract(double a, double b) {
-	return a - b;
-}
-
-double multiply(double a, double b) {
-	return a * b;
-}
-
-double divide(double a, double b) {
-	return a / b;
-}
-
-double exponent(double a, double b) {
-	return pow(a, b);
-}
-
 double factorial(double a) {
 	if(a == 0) {
 		return 1;
@@ -95,18 +73,7 @@ double factorial(double a) {
 	}
 }
 
-double percent(double a) {
-	return a / 100;
-}
-
-double percentof(double a, double b) {
-	return a / 100 * b;
-}
-
 int main() {
-
-	std::cout << "Press enter to start: ";
-
 	for(;;) {
 		int mode{ mainMenu() };
 
@@ -122,34 +89,34 @@ int main() {
 
 			switch(operation) {
 			case '+':
-				std::cout << firstNumber << " + " << secondNumber << " = " << add(firstNumber, secondNumber) << "\n\n";
+				std::cout << firstNumber << " + " << secondNumber << " = " << firstNumber + secondNumber << "\n\n";
 				break;
 			case '-':
-				std::cout << firstNumber << " - " << secondNumber << " = " << subtract(firstNumber, secondNumber) << "\n\n";
+				std::cout << firstNumber << " - " << secondNumber << " = " << firstNumber - secondNumber << "\n\n";
 				break;
 			case '*':
-				std::cout << firstNumber << " * " << secondNumber << " = " << multiply(firstNumber, secondNumber) << "\n\n";
+				std::cout << firstNumber << " * " << secondNumber << " = " << firstNumber * secondNumber << "\n\n";
 				break;
 			case '/':
 				if(secondNumber) {
-					std::cout << firstNumber << " / " << secondNumber << " = " << divide(firstNumber, secondNumber) << "\n\n";
+					std::cout << firstNumber << " / " << secondNumber << " = " << firstNumber / secondNumber << "\n\n";
 					break;
 				} else {
 					std::cout << "Illegal operation! Cannont divide by 0.\n\n";
 					break;
 				}
 			case '^':
-				std::cout << firstNumber << " ^ " << secondNumber << " = " << exponent(firstNumber, secondNumber) << "\n\n";
+				std::cout << firstNumber << " ^ " << secondNumber << " = " << pow(firstNumber, secondNumber) << "\n\n";
 				break;
 			case '!':
 				std::cout << firstNumber << "! = " << factorial(firstNumber) << "\n\n";
 				break;
 			case '%':
 				if(secondNumber) {
-					std::cout << firstNumber << "% of " << secondNumber << " = " << percentof(firstNumber, secondNumber) << "\n\n";
+					std::cout << firstNumber << "% of " << secondNumber << " = " << firstNumber / 100 * secondNumber << "\n\n";
 					break;
 				} else {
-					std::cout << firstNumber << "% = " << percent(firstNumber) << "\n\n";
+					std::cout << firstNumber << "% = " << firstNumber / 100 << "\n\n";
 				}
 			}
 			break;
@@ -203,5 +170,7 @@ int main() {
 			break;
 		}
 		}
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	}
 }
