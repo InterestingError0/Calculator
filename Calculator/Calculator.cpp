@@ -5,68 +5,46 @@
 #include <ios>
 #include <limits>
 
-int mainMenu() {
-	int input{ 0 };
-
-	do {
-		std::cout << "Enter 1 to enter arithmetic mode. Enter 2 to enter statistical average (e.g., mean, median) mode: ";
-		std::cin >> input;
-
-		if(input != 1 && input != 2) {
-			std::cout << "Please enter either 1 or 2.\n";
-		}
-	} while(input != 1 && input != 2);
-
-	return input;
+void clearInputBuffer() {
+	std::cin.clear();
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
 double getNumberFromUser() {
 	double input{};
-	std::cin.clear();
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	std::cout << "Enter a number: ";
-	std::cin >> input;
 
+	while(!(std::cin >> input)) {
+		std::cout << "Please enter a number.\n";
+		clearInputBuffer();
+	}
 	return input;
-
 }
 
 char getOperationFromUser() {
 	char input{};
-	do {
-		std::cin.clear();
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		std::cout << "Enter an operator (+, -, *, /, ^, !, or %): ";
-		std::cin >> input;
+	std::cout << "Enter an operator (+, -, *, /, ^, !, or %): ";
 
-		if(input != '+' && input != '-' && input != '*' && input != '/' && input != '^' && input != '!' && input != '%') {
-			std::cout << "Please enter a valid operator\n";
-		}
-	} while(input != '+' && input != '-' && input != '*' && input != '/' && input != '^' && input != '!' && input != '%');
-
+	while(std::cin >> input && (input != '+' && input != '-' && input != '*' && input != '/' && input != '^' && input != '!' && input != '%')) {
+		std::cout << "Please enter a valid operator\n";
+		clearInputBuffer();
+	}
 	return input;
 }
 
 std::string getStatisticalAverageFromUser() {
-	std::string input{ ' ' };
-	do {
-		std::cin.clear();
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		std::cout << "Enter a statistical average (e.g., mean, median): ";
-		std::cin >> input;
+	std::string input{};
+	std::cout << "Enter a statistical average (e.g., mean, median): ";
 
-		if(input != "mean" && input != "median") {
-			std::cout << "Please enter a valid statistical average\n";
-		}
-	} while(input != "mean" && input != "median");
-
+	while(std::cin >> input && (input != "mean" && input != "median")) {
+		std::cout << "Please enter a valid statistical average\n";
+		clearInputBuffer();
+	}
 	return input;
 }
 
 double factorial(double a) {
 	if(a == 0) {
-		return 1;
-	} else if(a == 1) {
 		return 1;
 	} else {
 		return factorial(a - 1) * a;
@@ -75,18 +53,22 @@ double factorial(double a) {
 
 int main() {
 	for(;;) {
-		int mode{ mainMenu() };
+		int mode{};
+		std::cout << "Enter 1 to enter arithmetic mode. Enter 2 to enter statistical average (mean/median) mode: ";
 
-		switch(mode) {
-		case 1:
-		{
+		while(!(std::cin >> mode) || (mode != 1 && mode != 2)) {
+			std::cout << "Please enter either 1 or 2.\n";
+			clearInputBuffer();
+		}
+
+		if(mode == 1) {
 			double firstNumber{ getNumberFromUser() };
 			char operation{ getOperationFromUser() };
 			double secondNumber{ 0 };
+
 			if(operation != '!') {
 				secondNumber = getNumberFromUser();
 			}
-
 			switch(operation) {
 			case '+':
 				std::cout << firstNumber << " + " << secondNumber << " = " << firstNumber + secondNumber << "\n\n";
@@ -100,11 +82,10 @@ int main() {
 			case '/':
 				if(secondNumber) {
 					std::cout << firstNumber << " / " << secondNumber << " = " << firstNumber / secondNumber << "\n\n";
-					break;
 				} else {
 					std::cout << "Illegal operation! Cannont divide by 0.\n\n";
-					break;
 				}
+				break;
 			case '^':
 				std::cout << firstNumber << " ^ " << secondNumber << " = " << pow(firstNumber, secondNumber) << "\n\n";
 				break;
@@ -114,63 +95,43 @@ int main() {
 			case '%':
 				if(secondNumber) {
 					std::cout << firstNumber << "% of " << secondNumber << " = " << firstNumber / 100 * secondNumber << "\n\n";
-					break;
 				} else {
 					std::cout << firstNumber << "% = " << firstNumber / 100 << "\n\n";
 				}
+				break;
 			}
-			break;
-		}
-		case 2:
-		{
+		} else {
 			std::string statisticalAverage{ getStatisticalAverageFromUser() };
-			int statisticalAverageToInt{ 0 };
 
 			if(statisticalAverage == "mean" || statisticalAverage == "Mean") {
-				statisticalAverageToInt = 1;
-			} else if(statisticalAverage == "median" || statisticalAverage == "Median") {
-				statisticalAverageToInt = 2;
-			}
-
-			switch(statisticalAverageToInt) {
-			case 1:
-			{
 				std::vector <double> numbers;
 				std::cout << "Enter the numbers you would like to find the mean of (q to stop entering numbers): \n";
+
 				for(double number{ 0 }; std::cin >> number;) {
 					numbers.push_back(number);
 				}
-
 				double sum{ 0 };
+
 				for(double x : numbers) {
 					sum += x;
 				}
-
 				std::cout << "The mean is " << sum / numbers.size() << '\n';
-				break;
-			}
-			case 2:
-			{
+			} else if(statisticalAverage == "median" || statisticalAverage == "Median") {
 				std::vector <double> numbers;
 				std::cout << "Enter the numbers you would like to find the mean of (q to stop entering numbers): \n";
+
 				for(double number{ 0 }; std::cin >> number;) {
 					numbers.push_back(number);
 				}
-
 				sort(numbers.begin(), numbers.end());
 
-				if(!(numbers.size() % 2)) {
-					std::cout << "The median is: " << (numbers[numbers.size() / 2 - 1 ] + numbers[numbers.size() / 2 ] ) / 2 << '\n';
-				} else {
+				if(numbers.size() % 2) {
 					std::cout << "The median is: " << numbers[numbers.size() / 2] << '\n';
+				} else {
+					std::cout << "The median is: " << (numbers[numbers.size() / 2 - 1] + numbers[numbers.size() / 2]) / 2 << '\n';
 				}
-				break;
 			}
-			}
-			break;
+			clearInputBuffer();
 		}
-		}
-		std::cin.clear();
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	}
 }
