@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <ios>
 #include <limits>
+#include <utility>
 
 void clearInputBuffer() {
 	std::cin.clear();
@@ -12,10 +13,11 @@ void clearInputBuffer() {
 
 char mainMenu() {
 	char input;
-	std::cout << "Enter 'a' to enter arithmetic mode, 's' to enter statistical average (mean/median/mode) mode, or 'q' to quit: ";
+	std::cout << "Enter 'a' to enter arithmetic mode, 's' to enter statistical average (mean/median/mode) mode, "
+		"'e' to enter equation solver mode, or 'q' to quit : ";
 
-	while(!(std::cin >> input) || (input != 'a' && input != 's' && input != 'q')) {
-		std::cout << "Please enter 'a','s', or 'q'.\n";
+	while(!(std::cin >> input) || (input != 'a' && input != 's' && input != 'q' && input != 'e')) {
+		std::cout << "Please enter 'a', 's', 'q', or 'e'.\n";
 		clearInputBuffer();
 	}
 	return input;
@@ -45,7 +47,7 @@ char getOperation() {
 	std::cout << "Enter an operator (+, -, *, /, ^, !, or %): ";
 
 	while(std::cin >> input && (input != '+' && input != '-' && input != '*' && input != '/' && input != '^' && input != '!' && input != '%')) {
-		std::cout << "Please enter a valid operator\n";
+		std::cout << "Please enter a valid operator.\n";
 		clearInputBuffer();
 	}
 	return input;
@@ -56,9 +58,27 @@ std::string getStatisticalAverage() {
 	std::cout << "Enter a statistical average (mean, median, or mode): ";
 	std::cin >> input;
 	std::transform(input.begin(), input.end(), input.begin(), [](unsigned char c) { return static_cast <char>(std::tolower(c)); });
+
 	while(std::cin && (input != "mean" && input != "median" && input != "mode")) {
-		std::cout << "Please enter a valid statistical average\n";
+		std::cout << "Please enter a valid statistical average.\n";
 		clearInputBuffer();
+		std::cin >> input;
+		std::transform(input.begin(), input.end(), input.begin(), [](unsigned char c) { return static_cast <char>(std::tolower(c)); });
+	}
+	return input;
+}
+
+std::string getEquationType() {
+	std::string input;
+	std::cout << "Enter the equation type: ";
+	std::cin >> input;
+	std::transform(input.begin(), input.end(), input.begin(), [](unsigned char c) { return static_cast <char>(std::tolower(c)); });
+
+	while(input != "quadratic") {
+		std::cout << "Please enter a valid equation type.\n";
+		clearInputBuffer();
+		std::cin >> input;
+		std::transform(input.begin(), input.end(), input.begin(), [](unsigned char c) { return static_cast <char>(std::tolower(c)); });
 	}
 	return input;
 }
@@ -68,6 +88,16 @@ double factorial(double a) {
 		return 1;
 	} else {
 		return factorial(a - 1) * a;
+	}
+}
+
+std::pair <double, double> calculateRootsOfQuadratic(double a, double b, double discriminant) {
+	if(discriminant > 0) {
+		return std::make_pair((-b + sqrt(discriminant)) / (2 * a), (-b - sqrt(discriminant)) / (2 * a));
+	} else if(!discriminant) {
+		return std::make_pair(- b / (2 * a), 0);
+	} else {
+		return std::make_pair(-b / (2 * a), sqrt(-discriminant) / (2 * a));
 	}
 }
 
@@ -115,7 +145,7 @@ int main() {
 				}
 				break;
 			}
-		} else {
+		} else if(function == 's') {
 			std::string statisticalAverage{ getStatisticalAverage() };
 
 			if(statisticalAverage == "mean") {
@@ -164,6 +194,28 @@ int main() {
 				std::cout << "The mode is: " << mode << '\n';
 			}
 			clearInputBuffer();
+		} else {
+			std::string equationType{ getEquationType() };
+
+			std::cout << "Make sure the equation is in the form ax^2 + bx + c = 0\n";
+			std::cout << "Enter a, b, and c:\n";
+			double a, b, c;
+
+			while(!(std::cin >> a >> b >> c)) {
+				std::cout << "Please enter numbers for a, b, and c\n";
+				clearInputBuffer();
+			}
+			double discriminant{ b * b - 4 * a * c };
+			std::pair <double, double> x = { calculateRootsOfQuadratic(a, b, discriminant).first, calculateRootsOfQuadratic(a, b, discriminant).second };
+
+			if(discriminant > 0) {
+				std::cout << "x1 = " << x.first << " x2 = " << x.second << '\n';
+			} else if(!discriminant) {
+				std::cout << "x = " << x.first << '\n';
+			} else {
+				std::cout << "x1 = " << x.first << " + " << x.second << "i\n";
+				std::cout << "x2 = " << x.first << " - " << x.second << "i\n";
+			}
 		}
 	}
 }
