@@ -11,6 +11,7 @@ This is a simple calculator program that I made in C++. These are the features t
 * Mean
 * Median
 * Mode
+* Solve quadratic equations
 
 I would like to make a GUI version of this calculator in the future.
 
