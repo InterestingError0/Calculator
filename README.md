@@ -10,3 +10,8 @@ This is a simple calculator program that I made in C++. These are the features t
 * Percent of
 * Mean
 * Median
+* Mode
+
+I would like to make a GUI version of this calculator in the future.
+
+-DH
