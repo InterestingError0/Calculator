@@ -11,14 +11,14 @@ void clearInputBuffer() {
 }
 
 char mainMenu() {
-	char mode;
+	char input;
 	std::cout << "Enter 'a' to enter arithmetic mode, 's' to enter statistical average (mean/median/mode) mode, or 'q' to quit: ";
 
-	while(!(std::cin >> mode) || (mode != 'a' && mode != 's' && mode != 'q')) {
+	while(!(std::cin >> input) || (input != 'a' && input != 's' && input != 'q')) {
 		std::cout << "Please enter 'a','s', or 'q'.\n";
 		clearInputBuffer();
 	}
-	return mode;
+	return input;
 }
 
 double getNumber() {
