@@ -70,7 +70,7 @@ std::string getStatisticalAverage() {
 
 std::string getEquationType() {
 	std::string input;
-	std::cout << "Enter the equation type: ";
+	std::cout << "Enter the equation type (quadratic): ";
 	std::cin >> input;
 	std::transform(input.begin(), input.end(), input.begin(), [](unsigned char c) { return static_cast <char>(std::tolower(c)); });
 
@@ -202,11 +202,11 @@ int main() {
 			double a, b, c;
 
 			while(!(std::cin >> a >> b >> c)) {
-				std::cout << "Please enter numbers for a, b, and c\n";
+				std::cout << "Please enter numbers for a, b, and c.\n";
 				clearInputBuffer();
 			}
 			double discriminant{ b * b - 4 * a * c };
-			std::pair <double, double> x = { calculateRootsOfQuadratic(a, b, discriminant).first, calculateRootsOfQuadratic(a, b, discriminant).second };
+			std::pair <double, double> x{ calculateRootsOfQuadratic(a, b, discriminant).first, calculateRootsOfQuadratic(a, b, discriminant).second };
 
 			if(discriminant > 0) {
 				std::cout << "x1 = " << x.first << " x2 = " << x.second << '\n';
