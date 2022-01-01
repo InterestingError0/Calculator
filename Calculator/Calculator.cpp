@@ -6,107 +6,21 @@
 #include <limits>
 #include <utility>
 
-void clearInputBuffer() {
-	std::cin.clear();
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-}
-
-char mainMenu() {
-	char input;
-	std::cout << "Enter 'a' to enter arithmetic mode, 's' to enter statistical average (mean/median/mode) mode, "
-		"'e' to enter equation solver mode, or 'q' to quit : ";
-
-	while(!(std::cin >> input) || (input != 'a' && input != 's' && input != 'q' && input != 'e')) {
-		std::cout << "Please enter 'a', 's', 'q', or 'e'.\n";
-		clearInputBuffer();
-	}
-	return input;
-}
-
-double getNumber() {
-	double input;
-	std::cout << "Enter a number: ";
-
-	while(!(std::cin >> input)) {
-		std::cout << "Please enter a number.\n";
-		clearInputBuffer();
-	}
-	return input;
-}
-
-void getNumbers(std::vector <double>& nums) {
-	double input;
-	std::cout << "Enter the numbers (q to stop entering numbers): \n";
-	while(std::cin >> input) {
-		nums.push_back(input);
-	}
-}
-
-char getOperation() {
-	char input;
-	std::cout << "Enter an operator (+, -, *, /, ^, !, or %): ";
-
-	while(std::cin >> input && (input != '+' && input != '-' && input != '*' && input != '/' && input != '^' && input != '!' && input != '%')) {
-		std::cout << "Please enter a valid operator.\n";
-		clearInputBuffer();
-	}
-	return input;
-}
-
-std::string getStatisticalAverage() {
-	std::string input;
-	std::cout << "Enter a statistical average (mean, median, or mode): ";
-	std::cin >> input;
-	std::transform(input.begin(), input.end(), input.begin(), [](unsigned char c) { return static_cast <char>(std::tolower(c)); });
-
-	while(std::cin && (input != "mean" && input != "median" && input != "mode")) {
-		std::cout << "Please enter a valid statistical average.\n";
-		clearInputBuffer();
-		std::cin >> input;
-		std::transform(input.begin(), input.end(), input.begin(), [](unsigned char c) { return static_cast <char>(std::tolower(c)); });
-	}
-	return input;
-}
-
-std::string getEquationType() {
-	std::string input;
-	std::cout << "Enter the equation type (quadratic): ";
-	std::cin >> input;
-	std::transform(input.begin(), input.end(), input.begin(), [](unsigned char c) { return static_cast <char>(std::tolower(c)); });
-
-	while(input != "quadratic") {
-		std::cout << "Please enter a valid equation type.\n";
-		clearInputBuffer();
-		std::cin >> input;
-		std::transform(input.begin(), input.end(), input.begin(), [](unsigned char c) { return static_cast <char>(std::tolower(c)); });
-	}
-	return input;
-}
-
-double factorial(double a) {
-	if(a == 0) {
-		return 1;
-	} else {
-		return factorial(a - 1) * a;
-	}
-}
-
-std::pair <double, double> calculateRootsOfQuadratic(double a, double b, double discriminant) {
-	if(discriminant > 0) {
-		return std::make_pair((-b + sqrt(discriminant)) / (2 * a), (-b - sqrt(discriminant)) / (2 * a));
-	} else if(!discriminant) {
-		return std::make_pair(- b / (2 * a), 0);
-	} else {
-		return std::make_pair(-b / (2 * a), sqrt(-discriminant) / (2 * a));
-	}
-}
+void clearInputBuffer();
+int mainMenu();
+double getNumber();
+void getNumbers(std::vector <double>& nums);
+char getOperation();
+int getStatisticalAverage();
+int getEquationType();
+double factorial(double a);
+std::pair <double, double> calculateRootsOfQuadratic(double a, double b, double discriminant);
 
 int main() {
-	for(;;) {
-		char function{ mainMenu() };
-		if(function == 'q') {
-			return 0;
-		} else if(function == 'a') {
+	std::cout << "Welcome to my calculator!\n";
+	while(true) {
+		int function{ mainMenu() };
+		if(function == 1) {
 			double firstNumber{ getNumber() };
 			char operation{ getOperation() };
 			double secondNumber{ 0 };
@@ -145,10 +59,9 @@ int main() {
 				}
 				break;
 			}
-		} else if(function == 's') {
-			std::string statisticalAverage{ getStatisticalAverage() };
-
-			if(statisticalAverage == "mean") {
+		} else if(function == 2) {
+			int statisticalAverage{ getStatisticalAverage() };
+			if(statisticalAverage == 1) {
 				std::vector <double> nums;
 				getNumbers(nums);
 				double sum{ 0 };
@@ -157,17 +70,16 @@ int main() {
 					sum += x;
 				}
 				std::cout << "The mean is " << sum / nums.size() << '\n';
-			} else if(statisticalAverage == "median") {
+			} else if(statisticalAverage == 2) {
 				std::vector <double> nums;
 				getNumbers(nums);
 				sort(nums.begin(), nums.end());
-
 				if(nums.size() % 2) {
 					std::cout << "The median is: " << nums[nums.size() / 2] << '\n';
 				} else {
 					std::cout << "The median is: " << (nums[nums.size() / 2 - 1] + nums[nums.size() / 2]) / 2 << '\n';
 				}
-			} else {
+			} else if(statisticalAverage == 3) {
 				std::vector <double> nums;
 				getNumbers(nums);
 				sort(nums.begin(), nums.end());
@@ -192,30 +104,134 @@ int main() {
 					mode = element;
 				}
 				std::cout << "The mode is: " << mode << '\n';
+			} else {
+				return 0;
 			}
 			clearInputBuffer();
 		} else {
-			std::string equationType{ getEquationType() };
+			int equationType{ getEquationType() };
+			if(equationType == 1) {
+				std::cout << "Make sure the equation is in the form ax^2 + bx + c = 0\n";
+				std::cout << "Enter a, b, and c:\n";
+				double a, b, c;
 
-			std::cout << "Make sure the equation is in the form ax^2 + bx + c = 0\n";
-			std::cout << "Enter a, b, and c:\n";
-			double a, b, c;
-
-			while(!(std::cin >> a >> b >> c)) {
-				std::cout << "Please enter numbers for a, b, and c.\n";
-				clearInputBuffer();
-			}
-			double discriminant{ b * b - 4 * a * c };
-			std::pair <double, double> x{ calculateRootsOfQuadratic(a, b, discriminant).first, calculateRootsOfQuadratic(a, b, discriminant).second };
-
-			if(discriminant > 0) {
-				std::cout << "x1 = " << x.first << " x2 = " << x.second << '\n';
-			} else if(!discriminant) {
-				std::cout << "x = " << x.first << '\n';
-			} else {
-				std::cout << "x1 = " << x.first << " + " << x.second << "i\n";
-				std::cout << "x2 = " << x.first << " - " << x.second << "i\n";
+				while(!(std::cin >> a >> b >> c)) {
+					std::cout << "Please enter numbers for a, b, and c.\n";
+					clearInputBuffer();
+				}
+				double discriminant{ b * b - 4 * a * c };
+				std::pair <double, double> x{ calculateRootsOfQuadratic(a, b, discriminant).first, calculateRootsOfQuadratic(a, b, discriminant).second };
+				if(discriminant > 0) {
+					std::cout << "x1 = " << x.first << " x2 = " << x.second << '\n';
+				} else if(!discriminant) {
+					std::cout << "x = " << x.first << '\n';
+				} else {
+					std::cout << "x1 = " << x.first << " + " << x.second << "i\n";
+					std::cout << "x2 = " << x.first << " - " << x.second << "i\n";
+				}
 			}
 		}
+	}
+}
+
+void clearInputBuffer() {
+	std::cin.clear();
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
+int mainMenu() {
+	int input;
+	std::cout << "\n1. Arithmetic mode\n2. Statistical average mode\n3. Equation solver mode\n4. Quit\n\n";
+	std::cout << "Enter your choice: ";
+
+	while(!(std::cin >> input) || (input != 1 && input != 2 && input != 3 && input != 4)) {
+		std::cout << "Invalid Input! Please try again: ";
+		clearInputBuffer();
+	}
+	return input;
+}
+
+double getNumber() {
+	double input;
+	std::cout << "Enter a number: ";
+
+	while(!(std::cin >> input)) {
+		std::cout << "Invalid Input! Please try again: ";
+		clearInputBuffer();
+	}
+	return input;
+}
+
+void getNumbers(std::vector <double>& nums) {
+	char input;
+	double num;
+	std::cout << "Enter the numbers (q to stop entering numbers):\n";
+	
+	while(true) {
+		std::cin >> input;
+		if(input == 'q') {
+			break;
+		} else {
+			std::cin.putback(input);
+			if(!(std::cin >> num)) {
+				std::cout << "Invalid Input! Please try again:\n";
+				clearInputBuffer();
+			} else {
+				nums.push_back(num);
+			}
+		}
+	}
+}
+
+char getOperation() {
+	char input;
+	std::cout << "Enter an operator (+, -, *, /, ^, !, or %): ";
+
+	while(std::cin >> input && (input != '+' && input != '-' && input != '*' && input != '/' && input != '^' && input != '!' && input != '%')) {
+		std::cout << "Invalid Input! Please try again: ";
+		clearInputBuffer();
+	}
+	return input;
+}
+
+int getStatisticalAverage() {
+	int input;
+	std::cout << "\n1. Mean\n2. Median\n3. Mode\n\n";
+	std::cout << "Enter your choice: ";
+
+	while(!(std::cin >> input) || (input != 1 && input != 2 && input != 3)) {
+		std::cout << "Invalid Input! Please try again: ";
+		clearInputBuffer();
+	}
+	return input;
+}
+
+int getEquationType() {
+	int input;
+	std::cout << "\n1. Quadratic\n\n";
+	std::cout << "Enter your choice: ";
+
+	while(!(std::cin >> input) || (input != 1)) {
+		std::cout << "Invalid Input! Please try again: ";
+		clearInputBuffer();
+	}
+	return input;
+}
+
+double factorial(double a) {
+	if(a == 0) {
+		return 1;
+	} else {
+		return factorial(a - 1) * a;
+	}
+}
+
+std::pair <double, double> calculateRootsOfQuadratic(double a, double b, double discriminant) {
+	if(discriminant > 0) {
+		return std::make_pair((-b + sqrt(discriminant)) / (2 * a), (-b - sqrt(discriminant)) / (2 * a));
+	} else if(!discriminant) {
+		return std::make_pair(-b / (2 * a), 0);
+	} else {
+		return std::make_pair(-b / (2 * a), sqrt(-discriminant) / (2 * a));
 	}
 }
