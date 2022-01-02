@@ -5,6 +5,7 @@
 #include <ios>
 #include <limits>
 #include <utility>
+#include <boost/math/special_functions/factorials.hpp>
 
 void clearInputBuffer();
 int mainMenu();
@@ -13,7 +14,6 @@ void getNumbers(std::vector <double>& nums);
 char getOperation();
 int getStatisticalAverage();
 int getEquationType();
-double factorial(double a);
 std::pair <double, double> calculateRootsOfQuadratic(double a, double b, double discriminant);
 
 int main() {
@@ -50,7 +50,7 @@ int main() {
 				break;
 			case '!':
 				if(std::floor(firstNumber) == firstNumber && firstNumber >= 0) {
-					std::cout << firstNumber << "! = " << factorial(firstNumber) << "\n\n";
+					std::cout << firstNumber << "! = " << boost::math::factorial<double>(static_cast<unsigned int>(firstNumber)) << "\n\n";
 				} else {
 					std::cout << "The number must be an integer!\n\n";
 				}
@@ -216,14 +216,6 @@ int getEquationType() {
 		clearInputBuffer();
 	}
 	return input;
-}
-
-double factorial(double a) {
-	if(a == 0) {
-		return 1;
-	} else {
-		return factorial(a - 1) * a;
-	}
 }
 
 std::pair <double, double> calculateRootsOfQuadratic(double a, double b, double discriminant) {
