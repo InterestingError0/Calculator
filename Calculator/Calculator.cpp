@@ -49,14 +49,14 @@ int main() {
 				std::cout << firstNumber << " ^ " << secondNumber << " = " << pow(firstNumber, secondNumber) << "\n\n";
 				break;
 			case '!':
-				std::cout << firstNumber << "! = " << factorial(firstNumber) << "\n\n";
+				if(std::floor(firstNumber) == firstNumber && firstNumber >= 0) {
+					std::cout << firstNumber << "! = " << factorial(firstNumber) << "\n\n";
+				} else {
+					std::cout << "The number must be an integer!\n\n";
+				}
 				break;
 			case '%':
-				if(secondNumber) {
-					std::cout << firstNumber << "% of " << secondNumber << " = " << firstNumber / 100 * secondNumber << "\n\n";
-				} else {
-					std::cout << firstNumber << "% = " << firstNumber / 100 << "\n\n";
-				}
+				std::cout << firstNumber << "% of " << secondNumber << " = " << firstNumber / 100 * secondNumber << "\n\n";
 				break;
 			}
 		} else if(function == 2) {
