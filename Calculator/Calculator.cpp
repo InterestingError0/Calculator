@@ -6,7 +6,7 @@
 #include <limits>
 #include <utility>
 #include <boost/math/special_functions/factorials.hpp>
-#include <boost/multiprecision/cpp_bin_float.hpp>
+#include <boost/multiprecision/cpp_dec_float.hpp>
 #include <boost/multiprecision/cpp_int.hpp>
 
 void clearInputBuffer();
@@ -52,7 +52,7 @@ int main() {
 				break;
 			case '!':
 				if(std::floor(firstNumber) == firstNumber && firstNumber >= 0) {
-					std::cout << firstNumber << "! = " << std::fixed << static_cast<boost::multiprecision::cpp_int>(boost::math::factorial<boost::multiprecision::cpp_bin_float_50>(static_cast<unsigned int>(firstNumber))) << "\n\n";
+					std::cout << firstNumber << "! = " << std::fixed << static_cast<boost::multiprecision::cpp_int>(boost::math::factorial<boost::multiprecision::cpp_dec_float_50>(static_cast<unsigned int>(firstNumber))) << "\n\n";
 				} else {
 					std::cout << "The number must be an integer!\n\n";
 				}
